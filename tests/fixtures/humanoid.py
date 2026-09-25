@@ -48,10 +48,16 @@ SEGMENTS = 24
 
 
 def _basis(axis):
+    """u = sideways (X projected off the axis), v = axis x u, so u x v = axis
+    and quads built ring-by-ring along +axis have outward normals."""
     ax = _norm(axis)
-    ref = (0.0, 0.0, 1.0) if abs(ax[2]) < 0.9 else (1.0, 0.0, 0.0)
-    u = _norm(_cross(ref, ax))
-    v = _cross(ax, u)  # u x v = ax
+    for prefer in ((1.0, 0.0, 0.0), (0.0, 0.0, 1.0), (0.0, 1.0, 0.0)):
+        d = sum(p * a for p, a in zip(prefer, ax))
+        u = tuple(p - a * d for p, a in zip(prefer, ax))
+        if sum(c * c for c in u) > 0.01:
+            u = _norm(u)
+            break
+    v = _cross(ax, u)
     return u, v
 
 
@@ -130,7 +136,7 @@ def make_humanoid(height=1.75, pose="A", rig="makehuman", scale=1.0):
     # head ellipsoid
     head_c = 0.94 * H
     rings = []
-    for i in range(1, 12):
+    for i in range(1, 13):
         zz = 0.88 * H + (H - 0.88 * H) * i / 12.0
         t = (zz - head_c) / (0.065 * H)
         f = math.sqrt(max(0.05, 1.0 - t * t))
@@ -185,6 +191,7 @@ def make_humanoid(height=1.75, pose="A", rig="makehuman", scale=1.0):
             r = _lerp_table([(0.039, 0.035), (0.285, 0.055), (0.47, 0.085), (0.56, 0.09)], frac)[0] * H / 1.75
             leg_rings.append(((hip[0], 0.0, z), r, r))
             z -= 0.03
+        leg_rings.append(((hip[0], -0.02 * H, 0.0), 0.04 * H / 1.75, 0.06 * H / 1.75))  # foot sole at floor
         b.tube(("upperleg01." if rig == "makehuman" else "leg.") + side, leg_rings, (0.0, 0.0, -1.0))
 
     names = RIG_NAMES[rig]

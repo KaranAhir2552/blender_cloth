@@ -1,0 +1,84 @@
+{
+  "artistic_presets": true,
+  "note": "ARTISTIC SIMULATION PRESETS. Qualitative characteristics chosen to look plausible in Blender's cloth solver. They are NOT validated against real-world material measurements. typical_gsm is an approximate real-world range, given for orientation only, and is not used by the physics mapping.",
+  "presets": {
+    "cotton": {
+      "display_name": "Cotton", "aliases": ["cotton twill", "poplin", "woven cotton", "cotton poplin", "oxford"],
+      "weight_class": "medium", "stretch": "low", "bend": "soft", "drape": "medium", "damping": "medium",
+      "friction": "medium", "thickness_mm": 0.5, "typical_gsm": [120, 200], "roughness": 0.85, "sheen": 0.2,
+      "description": "Everyday woven cotton (shirts, light tees)."
+    },
+    "heavy_cotton": {
+      "display_name": "Heavy Cotton", "aliases": ["canvas", "heavyweight cotton", "cotton canvas", "drill", "chino", "cotton drill"],
+      "weight_class": "heavy", "stretch": "very_low", "bend": "medium", "drape": "low", "damping": "medium",
+      "friction": "medium", "thickness_mm": 0.9, "typical_gsm": [240, 400], "roughness": 0.9, "sheen": 0.15,
+      "description": "Heavy woven cotton (workwear, chinos, canvas jackets)."
+    },
+    "jersey": {
+      "display_name": "Jersey Knit", "aliases": ["cotton jersey", "knit", "t-shirt jersey", "tee jersey", "single jersey"],
+      "weight_class": "light", "stretch": "high", "bend": "very_soft", "drape": "high", "damping": "low",
+      "friction": "medium", "thickness_mm": 0.6, "typical_gsm": [140, 220], "roughness": 0.9, "sheen": 0.3,
+      "description": "Stretchy knit used for T-shirts."
+    },
+    "denim": {
+      "display_name": "Denim", "aliases": ["jean", "raw denim", "selvedge", "denim twill"],
+      "weight_class": "heavy", "stretch": "very_low", "bend": "stiff", "drape": "low", "damping": "high",
+      "friction": "high", "thickness_mm": 1.0, "typical_gsm": [300, 480], "roughness": 0.9, "sheen": 0.1,
+      "description": "Stiff, heavy cotton twill."
+    },
+    "silk": {
+      "display_name": "Silk", "aliases": ["satin", "charmeuse", "chiffon", "silk satin"],
+      "weight_class": "ultralight", "stretch": "low", "bend": "very_soft", "drape": "very_high", "damping": "very_low",
+      "friction": "very_low", "thickness_mm": 0.15, "typical_gsm": [40, 90], "roughness": 0.35, "sheen": 0.6,
+      "description": "Very light, fluid, low-friction fabric."
+    },
+    "wool": {
+      "display_name": "Wool", "aliases": ["tweed", "flannel", "wool suiting", "merino", "worsted"],
+      "weight_class": "medium", "stretch": "medium", "bend": "medium", "drape": "medium", "damping": "high",
+      "friction": "high", "thickness_mm": 1.2, "typical_gsm": [200, 350], "roughness": 0.95, "sheen": 0.4,
+      "description": "Medium-weight woven wool."
+    },
+    "linen": {
+      "display_name": "Linen", "aliases": ["flax", "linen blend"],
+      "weight_class": "medium", "stretch": "very_low", "bend": "medium", "drape": "medium", "damping": "medium",
+      "friction": "high", "thickness_mm": 0.5, "typical_gsm": [150, 250], "roughness": 0.9, "sheen": 0.15,
+      "description": "Crisp, low-stretch fabric that wrinkles readily."
+    },
+    "polyester": {
+      "display_name": "Polyester", "aliases": ["poly", "polyester blend", "microfiber"],
+      "weight_class": "light", "stretch": "low", "bend": "soft", "drape": "high", "damping": "low",
+      "friction": "low", "thickness_mm": 0.3, "typical_gsm": [80, 180], "roughness": 0.6, "sheen": 0.35,
+      "description": "Light synthetic woven fabric."
+    },
+    "nylon": {
+      "display_name": "Nylon", "aliases": ["ripstop", "windbreaker fabric", "nylon ripstop", "taffeta"],
+      "weight_class": "light", "stretch": "low", "bend": "soft", "drape": "medium", "damping": "low",
+      "friction": "low", "thickness_mm": 0.25, "typical_gsm": [50, 120], "roughness": 0.45, "sheen": 0.4,
+      "description": "Light, slick synthetic (windbreakers, shells)."
+    },
+    "leather": {
+      "display_name": "Leather", "aliases": ["hide", "suede", "faux leather", "pleather"],
+      "weight_class": "very_heavy", "stretch": "very_low", "bend": "very_stiff", "drape": "very_low", "damping": "very_high",
+      "friction": "high", "thickness_mm": 1.2, "typical_gsm": [600, 1200], "roughness": 0.55, "sheen": 0.05,
+      "description": "Thick, stiff, heavily damped."
+    },
+    "rubber": {
+      "display_name": "Rubber", "aliases": ["latex", "neoprene"],
+      "weight_class": "very_heavy", "stretch": "high", "bend": "stiff", "drape": "low", "damping": "very_high",
+      "friction": "very_high", "thickness_mm": 1.5, "typical_gsm": [800, 1500], "roughness": 0.4, "sheen": 0.0,
+      "description": "Heavy, stretchy, high-friction material."
+    },
+    "elastic": {
+      "display_name": "Elastic", "aliases": ["spandex", "lycra", "elastane", "stretch", "stretch fabric"],
+      "weight_class": "light", "stretch": "very_high", "bend": "soft", "drape": "medium", "damping": "medium",
+      "friction": "high", "thickness_mm": 0.8, "typical_gsm": [150, 300], "roughness": 0.7, "sheen": 0.3,
+      "description": "Very stretchy fabric; also used for elastic bands."
+    },
+    "fleece": {
+      "display_name": "Fleece", "aliases": ["sweatshirt fleece", "french terry", "terry", "sweat fabric", "loopback"],
+      "weight_class": "medium", "stretch": "medium", "bend": "soft", "drape": "low", "damping": "high",
+      "friction": "high", "thickness_mm": 2.0, "typical_gsm": [220, 360], "roughness": 0.95, "sheen": 0.3,
+      "description": "Brushed knit used for hoodies and sweatshirts."
+    }
+  }
+}
