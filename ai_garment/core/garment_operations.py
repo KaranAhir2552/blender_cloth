@@ -324,7 +324,10 @@ def _describe_add(spec: GarmentSpec, params: Dict[str, Any]) -> List[str]:
     if t in ("cuff", "elastic_cuff"):
         where = "sleeve" if "sleeve" in target or target in ("arms", "cuffs", "") and spec.category != "bottom" \
             else "ankle"
-        return [f"Create {where} cuffs" + (" (elastic)" if t == "elastic_cuff" else "")]
+        out = [f"Create {where} cuffs"]
+        if t == "elastic_cuff":
+            out.append(f"Apply {params.get('strength') or 'medium'} elastic to {where} cuffs")
+        return out
     label = t.replace("_", " ")
     return [f"Add {label}" + (f" to {target.replace('_', ' ')}" if target else "")]
 

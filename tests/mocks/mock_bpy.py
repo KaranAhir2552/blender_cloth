@@ -564,6 +564,11 @@ class VertexGroups(_NamedList):
             v.groups = [g for g in v.groups if g.group != group.index]
         list.remove(self, group)
 
+    def clear(self):
+        for v in self._obj.data.vertices:
+            v.groups = []
+        del self[:]
+
 
 # ----------------------------------------------------------------------------
 # objects / armatures
@@ -704,6 +709,10 @@ class Object:
         mesh.shape_keys.key_blocks.append(sk)
         _BPY._log("shape_key_add", self.name, sk.name)
         return sk
+
+    def shape_key_clear(self):
+        self.data.shape_keys = None
+        _BPY._log("shape_key_clear", self.name)
 
     def shape_key_remove(self, key):
         self.data.shape_keys.key_blocks.remove(key)

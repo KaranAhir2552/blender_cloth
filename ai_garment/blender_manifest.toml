@@ -1,0 +1,18 @@
+schema_version = "1.0.0"
+
+id = "ai_garment"
+version = "0.1.0"
+name = "AI Garment Orchestrator"
+tagline = "High-level garment creation and cloth simulation API for AI"
+maintainer = "AI Garment contributors"
+type = "add-on"
+
+website = "https://github.com/KaranAhir2552/blender_cloth"
+tags = ["Physics", "Object"]
+
+blender_version_min = "4.2.0"
+
+license = ["SPDX:GPL-3.0-or-later"]
+
+[build]
+paths_exclude_pattern = ["__pycache__/", "/.git/", "*.zip"]
