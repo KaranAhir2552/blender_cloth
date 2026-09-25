@@ -255,3 +255,34 @@ def test_reset_and_delete(scene):
     assert r.ok
     assert all(o.get("ai_garment_id") != shirt.id for o in bpy.data.objects)
     assert bpy.data.objects.get("Human") is body and bpy.data.objects.get("Human_rig") is arm
+
+
+def test_fit_accepts_avatar_handle_and_logs_display_name(scene):
+    bpy, body, arm, system = scene
+    shirt = system.create(type="tshirt")
+    handle = system.detect_avatar()
+    r = shirt.fit_to_avatar(handle)
+    assert r.ok, r.to_dict()
+    assert any("Avatar detected: MakeHuman (Human)" in line for line in r.logs)
+
+
+def test_simulate_on_copy_leaves_original_untouched(scene):
+    bpy, body, arm, system = scene
+    shirt = system.create(type="tshirt")
+    r = shirt.simulate_on_copy(mode="preview", quality="draft")
+    assert r.ok, r.to_dict()
+    copy = system.get(r.data["copy_id"])
+    assert copy is not None and copy.object_name != shirt.object_name
+    assert shirt.record.state["simulated"] is False
+    assert copy.record.state["simulated"] is True
+    assert copy.delete().ok
+
+
+def test_geometry_edits_refused_for_addon_garments(scene):
+    bpy, body, arm, system = scene
+    shirt = system.create(type="tshirt")
+    shirt.record.provider = "opensew"  # pretend an add-on built it (OpenSew itself is unavailable here)
+    r = shirt.modify(component="sleeves", length="-10%")
+    assert not r.ok and r.errors[0].code == "CAPABILITY_NOT_SUPPORTED"
+    r = shirt.set_color("red")  # material/physics edits are still routed to native
+    assert r.ok, r.to_dict()

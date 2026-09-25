@@ -70,12 +70,14 @@ ai_garment/                     ← the Blender extension (zip this folder)
     geometry/
       mathutil.py               vectors, convex hull, ellipse helpers
       tube.py                   MeshBuilder: lofted rings, patches, groups, sewing
+      recipes.py                builder-recipe registry (top, pants, skirt, dress, + custom)
       builder.py                GarmentSpec + AvatarModel → GarmentMeshData
     diagnostics.py              penetration / settling / stability analysis
     garment_operations.py       Operation, OperationDef registry, spec transforms
     planning.py                 creation & simulation plans, dry-run description
     nl_mapping.py               natural language → operations (rule based)
     transaction.py              undo journal (rollback) independent of bpy
+    record.py                   GarmentRecord (runtime + persisted state of one garment)
   providers/
     base.py                     GarmentProvider ABC, Capability, ProviderStatus
     registry.py                 ProviderRegistry: detect, select, route, fallback
@@ -101,6 +103,8 @@ ai_garment/                     ← the Blender extension (zip this folder)
     dispatcher.py               validate-all → dry-run | transactional execute
     garment.py                  Garment handle + GarmentSystem facade (`garment`)
     commands.py                 flat command functions returning dicts + registry
+scripts/run_checks.py           runs every available check, prints the STATUS block
+scripts/build_extension.py      builds extension / legacy zips without Blender
 tests/                          ← NOT shipped in the extension
   mocks/mock_bpy.py             strict minimal bpy/mathutils mock
   fixtures/humanoid.py          synthetic MakeHuman-like humanoid (verts + bones)

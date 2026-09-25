@@ -6,6 +6,7 @@ from typing import Any, List, Optional, Tuple
 from ..core.errors import GarmentError
 from ..core.transaction import Transaction
 from . import scene as bscene
+from ._bpy import get_bpy
 
 PREFIX = "AIG_"
 CLOTH = "AIG_Cloth"
@@ -78,12 +79,16 @@ class cloth_only_evaluation:
     def __enter__(self) -> "cloth_only_evaluation":
         for n in POST_CLOTH:
             m = self.obj.modifiers.get(n)
-            if m is not None:
-                self.saved.append((m, m.show_viewport))
+            if m is not None and m.show_viewport:
+                self.saved.append((m, True))
                 m.show_viewport = False
+        if self.saved:
+            get_bpy().context.view_layer.update()  # re-evaluate so reads see the cloth-only mesh
         return self
 
     def __exit__(self, *exc: Any) -> bool:
         for m, state in self.saved:
             m.show_viewport = state
+        if self.saved:
+            get_bpy().context.view_layer.update()
         return False

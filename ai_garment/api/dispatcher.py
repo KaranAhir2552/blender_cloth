@@ -205,6 +205,12 @@ def _flush(system: Any, record: Optional[GarmentRecord], pending: Set[str], res:
         pending.clear()
         return
     p = _provider(system, record, Capability.COMPONENTS)
+    if p.name != record.provider and "geometry" in pending:
+        raise GarmentError("CAPABILITY_NOT_SUPPORTED",
+                           f"Provider '{record.provider}' cannot regenerate this garment's geometry and the native "
+                           "fallback would replace it with proxy geometry.",
+                           ["recreate the garment with provider='blender_native'",
+                            "limit edits to fabric / color / physics for add-on garments"])
     r = _check(p.update_garment(record, frozenset(pending)))
     res.merge(r)
     pending.clear()

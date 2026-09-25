@@ -190,7 +190,7 @@ class BlenderNativeProvider(GarmentProvider):
             return Result.failure("fit_garment", "AVATAR_NOT_FOUND", MSG_AVATAR_NOT_FOUND)
         r = Result(action="fit_garment")
         record.avatar_name = avatar.object_name
-        log_event("Avatar detected", f"{avatar.source} ({avatar.name})", r)
+        log_event("Avatar detected", f"{avatar.source_display} ({avatar.name})", r)
         r.merge(self.update_garment(record, {"fit"}, avatar))
         col = self.prepare_collision(avatar, {"garment_type": record.spec.type, "mode": ctx.get("collision_mode"),
                                               "margin": ctx.get("margin")})

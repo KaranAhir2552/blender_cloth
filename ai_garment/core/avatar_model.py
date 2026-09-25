@@ -65,6 +65,22 @@ RIG_SIGNATURES: Dict[str, Dict[str, List[str]]] = {
                "upperarm": ["arm"], "forearm": ["forearm"], "hand": ["hand"], "thigh": ["upleg"], "shin": ["leg"],
                "foot": ["foot"], "spine": ["spine", "spine1"]},
 }
+SOURCE_DISPLAY = {"makehuman": "MakeHuman", "game_engine": "MakeHuman/MPFB game-engine rig", "rigify": "Rigify",
+                  "mixamo": "Mixamo", "generic": "Generic mesh", "metadata": "Avatar metadata"}
+
+
+def register_rig_signature(name: str, roles: Dict[str, List[str]], replace: bool = False) -> None:
+    """Teach the resolver a new rig naming convention.
+
+    ``roles`` maps role -> candidate base names (lower-case, side suffix and
+    punctuation removed, e.g. ``{"upperarm": ["upperarm"], "forearm": ["forearm"], ...}``).
+    Roles: hips, chest, neck, head, clavicle, upperarm, forearm, hand, thigh, shin, foot, spine.
+    """
+    if name in RIG_SIGNATURES and not replace:
+        raise GarmentError("DUPLICATE_RIG", f"Rig signature '{name}' already registered.")
+    RIG_SIGNATURES[name] = {k: [re.sub(r"[^a-z0-9]", "", v.lower()) for v in vals] for k, vals in roles.items()}
+
+
 GENERIC_ROLES: Dict[str, List[str]] = {
     "hips": ["hips", "pelvis", "root", "hip"], "chest": ["chest", "upperchest", "spine2", "spine03", "spine003"],
     "neck": ["neck", "neck01", "neck1"], "head": ["head"], "clavicle": ["clavicle", "collarbone", "shoulder"],
@@ -450,6 +466,10 @@ class AvatarModel:
     confidence: float = 0.5
     measured_keys: List[str] = field(default_factory=list)
     object_name: Optional[str] = None
+
+    @property
+    def source_display(self) -> str:
+        return SOURCE_DISPLAY.get(self.source, self.source)
 
     def get_measurements(self) -> Dict[str, float]:
         return dict(self.measurements)

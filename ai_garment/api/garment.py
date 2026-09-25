@@ -128,9 +128,18 @@ class Garment:
         return self._op("enable_self_collision", dry_run, preset=preset)
 
     # scene operations --------------------------------------------------------------------
-    def fit_to_avatar(self, avatar: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None,
+    def fit_to_avatar(self, avatar: Any = None, metadata: Optional[Dict[str, Any]] = None,
                       collision_mode: Optional[str] = None, margin: Optional[float] = None,
                       dry_run: bool = False) -> Result:
+        """``avatar`` may be an object name, the handle from ``detect_avatar()`` or an AvatarModel."""
+        model = avatar.model if isinstance(avatar, AvatarHandle) else avatar
+        if isinstance(model, AvatarModel):
+            if model.object_name:
+                avatar = model.object_name
+            else:
+                avatar, metadata = None, dict(model.measurements, units="m")
+        elif avatar is not None and not isinstance(avatar, str):
+            return Result.failure("fit", "INVALID_PARAM", "avatar must be a name, an AvatarHandle or an AvatarModel.")
         return self._op("fit", dry_run, avatar=avatar, metadata=metadata, collision_mode=collision_mode,
                         margin=margin)
 
@@ -139,6 +148,17 @@ class Garment:
     def simulate(self, mode: str = "natural", quality: Optional[str] = None, dry_run: bool = False,
                  **settings: Any) -> Result:
         return self._op("simulate", dry_run, mode=mode, quality=quality, **settings)
+
+    def simulate_on_copy(self, mode: str = "preview", quality: Optional[str] = None, **settings: Any) -> Result:
+        """Simulate a temporary duplicate, leaving this garment untouched. The copy's id is in
+        ``result.data['copy_id']``; delete it with ``garment.get(copy_id).delete()`` when done."""
+        try:
+            copy = self.duplicate(name=f"{self.name} (sim preview)")
+        except GarmentError as err:
+            return Result.from_error("simulate_on_copy", err)
+        r = copy.simulate(mode=mode, quality=quality, **settings)
+        r.data["copy_id"] = copy.id
+        return r
 
     def settle(self, max_frames: Optional[int] = None, threshold: Optional[float] = None, apply: str = "none",
                quality: Optional[str] = None, dry_run: bool = False) -> Result:
@@ -315,7 +335,7 @@ class GarmentSystem:
             model = self._find_avatar(name, metadata, required=True)
         except GarmentError as err:
             return AvatarHandle(self, None, Result.from_error("detect_avatar", err))
-        log_event("Avatar detected", f"{model.source} ({model.name})", r)
+        log_event("Avatar detected", f"{model.source_display} ({model.name})", r)
         for w in model.warnings:
             r.warn(w)
         r.data.update({"name": model.object_name or model.name, "source": model.source, "pose": model.pose,

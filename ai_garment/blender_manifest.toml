@@ -14,5 +14,8 @@ blender_version_min = "4.2.0"
 
 license = ["SPDX:GPL-3.0-or-later"]
 
+[permissions]
+files = "Reads optional provider-mapping and fabric-preset JSON files"
+
 [build]
 paths_exclude_pattern = ["__pycache__/", "/.git/", "*.zip"]

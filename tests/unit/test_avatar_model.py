@@ -111,3 +111,17 @@ def test_to_dict_json():
     import json
     h = make_humanoid()
     json.dumps(build_avatar_model("Human", h["vertices"], bones=h["bones"]).to_dict())
+
+
+def test_register_custom_rig_signature():
+    from ai_garment.core.avatar_model import RIG_SIGNATURES, register_rig_signature
+    h = make_humanoid(rig="game_engine")
+    renamed = {"CUSTOM_" + k: v for k, v in h["bones"].items()}
+    roles = {role: ["custom" + names[0]] for role, names in RIG_SIGNATURES["game_engine"].items()}
+    register_rig_signature("studio_rig", roles)
+    try:
+        lm, rig, _ = resolve_landmarks_from_bones(renamed)
+        assert rig == "studio_rig"
+        assert lm["wrist_l"][2] < lm["shoulder_l"][2]
+    finally:
+        RIG_SIGNATURES.pop("studio_rig")
